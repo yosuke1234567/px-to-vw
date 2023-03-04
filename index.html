@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel to Viewport Width</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            color: #4a4a44;
+            font-weight: 500;
+        }
+
+        h1 {
+            background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        span {
+            letter-spacing: 0.025em;
+        }
+
+        button,
+        input {
+            display: inline-block;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+
+        .container {
+            width: 400px;
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px 0;
+            max-width: 320px;
+            padding-top: 8px;
+            margin: 0 auto;
+        }
+
+        .input-area {
+            display: grid;
+            grid-template-columns: 50px minmax(0, 270px);
+            align-items: center;
+        }
+
+        input {
+            padding: 12px 16px;
+            border: 1px solid #aab;
+            margin-left: 16px;
+            color: inherit;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        input:focus-visible {
+            outline: 0;
+            border: 1px solid #03a9f4;
+            box-shadow: 0 0 2px 1px #b3e5fc;
+        }
+
+        button {
+            padding: 12px 0;
+            border: 0;
+            margin-top: 8px;
+            background-image: linear-gradient(120deg, #4ac0dd, #a270c2, hsl(323, 49%, 60%));
+            background-size: 200%;
+            color: #fff;
+            cursor: pointer;
+            transition: background-position 0.5s, box-shadow 0.1s, opacity 0.2s;
+        }
+
+        button:hover:not([disabled]) {
+            /* background-image: linear-gradient(120deg, #27acce, #7d45a1); */
+            background-position: 100% 50%;
+        }
+
+        button:active:not([disabled]) {
+            box-shadow: 0 0 12px #a270c280, 0 0 4px #aab;
+        }
+
+        button[disabled] {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .result-area {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            max-width: 240px;
+            height: 66px;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin: 24px auto 0;
+            box-shadow: 0 0 12px #a270c240, 0 0 6px #ddd;
+            color: #4a4a44d0;
+            line-height: 2;
+            transition: background-color 0.2s;
+        }
+
+        .result-area.clickable {
+            cursor: pointer;
+        }
+
+        .result-area.clickable:hover {
+            background-color: #f5f5f5;
+        }
+
+        .result {
+            background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 8px;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .message {
+            width: fit-content;
+            margin: 12px auto 0;
+            padding: 0.5em 1em;
+            border-radius: 4px;
+            background-color: #4a4a44;
+            color: #fff;
+            font-size: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Pixel to Viewport Width</h1>
+        <form id="form" autocomplete="off">
+            <div class="input-area">
+                <span>Parent</span>
+                <input type="text" id="parent-input">
+            </div>
+            <div class="input-area">
+                <span>Child</span>
+                <input type="text" id="child-input">
+            </div>
+            <button type="submit" id="calc" disabled>Calculate</button>
+        </form>
+        <div id="result-area" class="result-area">
+            <span id="result" class="result"></span>
+            <span>vw</span>
+        </div>
+        <div id="message" class="message">Copied.</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('form')
+        const parentInput = document.getElementById('parent-input')
+        const childInput = document.getElementById('child-input')
+        const calc = document.getElementById('calc')
+        const resultArea = document.getElementById('result-area')
+        const result = document.getElementById('result')
+        const message = document.getElementById('message')
+
+        const fixValue = (event) => {
+            // 数値と小数点以外を空文字にする
+            event.target.value = event.target.value.replace(/[^0-9|.]+$/, '')
+            calc.disabled = parentInput.value && childInput.value ? false : true
+        }
+
+        parentInput.addEventListener('input', fixValue)
+        childInput.addEventListener('input', fixValue)
+
+        form.addEventListener('submit', event => {
+            event.preventDefault()
+
+            const parentValue = Number(parentInput.value)
+            const childValue = Number(childInput.value)
+
+            if (parentValue && childValue) {
+                result.textContent = Math.round((childValue / parentValue) * 10000) / 100
+                resultArea.classList.add('clickable')
+            }
+        })
+
+        resultArea.addEventListener('click', async () => {
+            if (result.textContent) {
+                // クリップボードにコピー
+                await navigator.clipboard.writeText(result.textContent)
+                message.classList.add('show')
+                setTimeout(() => message.classList.remove('show'), 1000)
+            }
+        })
+    </script>
+</body>
+
+</html>
