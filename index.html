@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -186,7 +186,7 @@
         const message = document.getElementById('message')
 
         const fixValue = (event) => {
-            // 数値と小数点以外を空文字にする
+            // Make all but numbers and decimal points empty
             event.target.value = event.target.value.replace(/[^0-9|.]+$/, '')
             calc.disabled = parentInput.value && childInput.value ? false : true
         }
@@ -208,7 +208,7 @@
 
         resultArea.addEventListener('click', async () => {
             if (result.textContent) {
-                // クリップボードにコピー
+                // Copy to clipboard
                 await navigator.clipboard.writeText(result.textContent)
                 message.classList.add('show')
                 setTimeout(() => message.classList.remove('show'), 1000)
