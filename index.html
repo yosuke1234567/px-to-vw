@@ -27,7 +27,7 @@
             text-align: center;
         }
 
-        span, label {
+        span {
             letter-spacing: 0.025em;
         }
 
@@ -159,14 +159,14 @@
     <div class="container">
         <h1>Pixel to Viewport Width</h1>
         <form id="form" autocomplete="off">
-            <div class="input-area">
-                <label>Parent</label>
+            <label class="input-area">
+                <span>Parent</span>
                 <input type="text" id="parent-input">
-            </div>
-            <div class="input-area">
-                <label>Child</label>
+            </label>
+            <label class="input-area">
+                <span>Child</span>
                 <input type="text" id="child-input">
-            </div>
+            </label>
             <button type="submit" id="calc" disabled>Calculate</button>
         </form>
         <div id="result-area" class="result-area">
