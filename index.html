@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple calculator that convert pixels to viewport width.">
     <title>Pixel to Viewport Width</title>
     <style>
         * {
@@ -26,7 +27,7 @@
             text-align: center;
         }
 
-        span {
+        span, label {
             letter-spacing: 0.025em;
         }
 
@@ -159,11 +160,11 @@
         <h1>Pixel to Viewport Width</h1>
         <form id="form" autocomplete="off">
             <div class="input-area">
-                <span>Parent</span>
+                <label>Parent</label>
                 <input type="text" id="parent-input">
             </div>
             <div class="input-area">
-                <span>Child</span>
+                <label>Child</label>
                 <input type="text" id="child-input">
             </div>
             <button type="submit" id="calc" disabled>Calculate</button>
