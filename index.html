@@ -1,221 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A simple calculator that convert pixels(px) to viewport width(vw).">
-    <title>PX to VW Calculator</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="A simple calculator that convert pixels to viewport width.">
+  <title>Pixel to Viewport Width</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, Roboto, sans-serif;
+    }
 
-        body {
-            margin: 0;
-            color: #4a4a44;
-            font-weight: 500;
-        }
+    :root {
+      color-scheme: light dark;
+      --bg-color: #fff;
+      --text-color: #22242a;
+    }
 
-        h1 {
-            background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-        }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #22242a;
+        --text-color: #fff;
+      }
+    }
 
-        span {
-            letter-spacing: 0.025em;
-        }
+    :root.dark-mode {
+      --bg-color: #22242a;
+      --text-color: #fff;
+    }
 
-        button,
-        input {
-            display: inline-block;
-            border-radius: 4px;
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-        }
+    body {
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-weight: 500;
+      transition: background-color 0.2s, color 0.2s;
+    }
 
-        .container {
-            width: 400px;
-            max-width: 90%;
-            margin: 0 auto;
-            padding: 32px 0;
-        }
+    h1 {
+      background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px 0;
-            max-width: 320px;
-            padding-top: 8px;
-            margin: 0 auto;
-        }
+    span {
+      letter-spacing: 0.025em;
+    }
 
-        .input-area {
-            display: grid;
-            grid-template-columns: 50px minmax(0, 270px);
-            align-items: center;
-        }
+    button,
+    input {
+      display: inline-block;
+      border-radius: 4px;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
 
-        input {
-            padding: 12px 16px;
-            border: 1px solid #aab;
-            margin-left: 16px;
-            color: inherit;
-            transition: box-shadow 0.2s, border-color 0.2s;
-        }
+    .container {
+      width: 400px;
+      max-width: 90%;
+      margin: 0 auto;
+    }
 
-        input:focus-visible {
-            outline: 0;
-            border: 1px solid #03a9f4;
-            box-shadow: 0 0 2px 1px #b3e5fc;
-        }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px 0;
+      max-width: 320px;
+      padding-top: 8px;
+      margin: 0 auto;
+    }
 
-        button {
-            padding: 12px 0;
-            border: 0;
-            margin-top: 8px;
-            background-image: linear-gradient(120deg, #4ac0dd, #a270c2, hsl(323, 49%, 60%));
-            background-size: 200%;
-            color: #fff;
-            cursor: pointer;
-            transition: background-position 0.5s, box-shadow 0.1s, opacity 0.2s;
-        }
+    .input-area {
+      display: grid;
+      grid-template-columns: 50px minmax(0, 270px);
+      align-items: center;
+    }
 
-        button:hover:not([disabled]) {
-            /* background-image: linear-gradient(120deg, #27acce, #7d45a1); */
-            background-position: 100% 50%;
-        }
+    input {
+      padding: 12px 16px;
+      border: 1px solid #aab;
+      margin-left: 16px;
+      background-color: transparent;
+      color: inherit;
+      transition: box-shadow 0.1s, border-color 0.2s;
+    }
 
-        button:active:not([disabled]) {
-            box-shadow: 0 0 12px #a270c280, 0 0 4px #aab;
-        }
+    input:focus-visible {
+      outline: 0;
+      border: 1px solid #356ccb;
+      box-shadow: 0 0 2px 1px rgba(111, 152, 223, 0.5);
+    }
 
-        button[disabled] {
-            opacity: 0.3;
-            cursor: default;
-        }
+    #calc {
+      padding: 12px 0;
+      border: 0;
+      margin-top: 8px;
+      background-image: linear-gradient(120deg, #4ac0dd, #a270c2, #cb67a5);
+      background-size: 200%;
+      color: #fff;
+      cursor: pointer;
+      transition: background-position 0.5s, opacity 0.2s, filter 0.1s;
+    }
 
-        .result-area {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            max-width: 240px;
-            height: 66px;
-            padding: 12px 24px;
-            border-radius: 4px;
-            margin: 24px auto 0;
-            box-shadow: 0 0 12px #a270c240, 0 0 6px #ddd;
-            color: #4a4a44d0;
-            line-height: 2;
-            transition: background-color 0.2s;
-        }
+    #calc:hover:not([disabled]) {
+      background-position: 100% 50%;
+    }
 
-        .result-area.clickable {
-            cursor: pointer;
-        }
+    #calc:active:not([disabled]) {
+      filter: brightness(0.9);
+    }
 
-        .result-area.clickable:hover {
-            background-color: #f5f5f5;
-        }
+    #calc[disabled] {
+      opacity: 0.3;
+      cursor: default;
+    }
 
-        .result {
-            background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-right: 8px;
-            font-size: 28px;
-            font-weight: 700;
-            line-height: 1.5;
-        }
+    #result-area {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      max-width: 240px;
+      height: 66px;
+      padding: 12px 24px;
+      border-radius: 4px;
+      border: 1px solid rgba(150, 150, 150, 0.25);
+      margin: 24px auto 0;
+      line-height: 2;
+      transition: opacity 0.2s, box-shadow 0.5s;
+    }
 
-        .message {
-            width: fit-content;
-            margin: 12px auto 0;
-            padding: 0.5em 1em;
-            border-radius: 4px;
-            background-color: #4a4a44;
-            color: #fff;
-            font-size: 14px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
+    #result-area.clickable {
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(111, 95, 119, 0.3), 0 2px 16px rgba(255, 255, 255, 0.1);
+    }
 
-        .message.show {
-            opacity: 1;
-            visibility: visible;
-        }
-    </style>
-    <meta name="google-site-verification" content="wTl4kQUFLgN5ZGTUoEH1pZ5BqGlPmRp8WkmrVhmZlz0" />
+    #result-area.clickable:hover {
+      opacity: 0.7;
+    }
+
+    #result {
+      background-image: linear-gradient(120deg, #4ac0dd, #a270c2);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-right: 8px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    #message {
+      width: fit-content;
+      margin: 12px auto 0;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      border: 1px solid #aab;
+      font-size: 14px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    #message.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .theme-area {
+      display: flex;
+      justify-content: flex-end;
+      width: 1200px;
+      max-width: 90%;
+      margin: 0 auto;
+      padding: 16px 0;
+      font-weight: 400;
+    }
+
+    select {
+      margin-left: 4px;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
+
+    select, option {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font: inherit;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>PX to VW Calculator</h1>
-        <form id="form" autocomplete="off">
-            <label class="input-area">
-                <span>Parent</span>
-                <input type="text" id="parent-input">
-            </label>
-            <label class="input-area">
-                <span>Child</span>
-                <input type="text" id="child-input">
-            </label>
-            <button type="submit" id="calc" disabled>Calculate</button>
-        </form>
-        <div id="result-area" class="result-area">
-            <span id="result" class="result"></span>
-            <span>vw</span>
-        </div>
-        <div id="message" class="message">Copied.</div>
+  <div class="theme-area">
+    <label>
+      theme
+      <select id="theme-selector">
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+      </select>
+    </label>
+  </div>
+  <div class="container">
+    <h1>Pixel to Viewport Width</h1>
+    <form id="form" autocomplete="off">
+      <label class="input-area">
+        <span>Parent</span>
+        <input type="text" id="parent-input">
+      </label>
+      <label class="input-area">
+        <span>Child</span>
+        <input type="text" id="child-input">
+      </label>
+      <button type="submit" id="calc" disabled>Calculate</button>
+    </form>
+    <div id="result-area">
+      <span id="result"></span>
+      <span>vw</span>
     </div>
+    <div id="message">Copied.</div>
+  </div>
 
-    <script>
-        const form = document.getElementById('form')
-        const parentInput = document.getElementById('parent-input')
-        const childInput = document.getElementById('child-input')
-        const calc = document.getElementById('calc')
-        const resultArea = document.getElementById('result-area')
-        const result = document.getElementById('result')
-        const message = document.getElementById('message')
+  <script>
+    const form = document.getElementById('form')
+    const parentInput = document.getElementById('parent-input')
+    const childInput = document.getElementById('child-input')
+    const calc = document.getElementById('calc')
+    const resultArea = document.getElementById('result-area')
+    const result = document.getElementById('result')
+    const message = document.getElementById('message')
 
-        const fixValue = (event) => {
-            // Make all but numbers and decimal points empty
-            event.target.value = event.target.value.replace(/[^0-9|.]+$/, '')
-            calc.disabled = parentInput.value && childInput.value ? false : true
-        }
+    const fixValue = (event) => {
+      // 数値と小数点以外を空文字にする
+      event.target.value = event.target.value.replace(/[^0-9|.]+$/, '')
+      calc.disabled = parentInput.value && childInput.value ? false : true
+    }
 
-        parentInput.addEventListener('input', fixValue)
-        childInput.addEventListener('input', fixValue)
+    parentInput.addEventListener('input', fixValue)
+    childInput.addEventListener('input', fixValue)
 
-        form.addEventListener('submit', event => {
-            event.preventDefault()
+    form.addEventListener('submit', event => {
+      event.preventDefault()
 
-            const parentValue = Number(parentInput.value)
-            const childValue = Number(childInput.value)
+      const parentValue = Number(parentInput.value)
+      const childValue = Number(childInput.value)
 
-            if (parentValue && childValue) {
-                result.textContent = Math.round((childValue / parentValue) * 10000) / 100
-                resultArea.classList.add('clickable')
-            }
-        })
+      if (parentValue && childValue) {
+        result.textContent = Math.round((childValue / parentValue) * 10000) / 100
+        resultArea.classList.add('clickable')
+      }
+    })
 
-        resultArea.addEventListener('click', async () => {
-            if (result.textContent) {
-                // Copy to clipboard
-                await navigator.clipboard.writeText(result.textContent)
-                message.classList.add('show')
-                setTimeout(() => message.classList.remove('show'), 1000)
-            }
-        })
-    </script>
+    resultArea.addEventListener('click', async () => {
+      if (result.textContent) {
+        // クリップボードにコピー
+        await navigator.clipboard.writeText(result.textContent)
+        message.classList.add('is-visible')
+        setTimeout(() => message.classList.remove('is-visible'), 1000)
+      }
+    })
+
+    // テーマ
+    const themeSelector = document.getElementById('theme-selector')
+    const themeMediaQueryList = window.matchMedia('(prefers-color-scheme: dark)')
+    let isDark = themeMediaQueryList.matches
+    if (isDark) themeSelector.value = 'dark'
+
+    const changeTheme = () => {
+      isDark = themeSelector.value === 'dark'
+      if (isDark) document.documentElement.classList.add('dark-mode')
+      else document.documentElement.classList.remove('dark-mode')
+    }
+
+    themeSelector.addEventListener('change', changeTheme)
+
+    themeMediaQueryList.addEventListener('change', () => {
+      isDark = themeMediaQueryList.matches
+      if (isDark) themeSelector.value = 'dark'
+      else themeSelector.value = 'light'
+    })
+  </script>
 </body>
 
 </html>
